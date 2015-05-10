@@ -65,3 +65,4 @@ build/*.*
 */classes/*.*
 WebContent/WEB-INF/classes/*.*
 *.myumldata
+/build/
