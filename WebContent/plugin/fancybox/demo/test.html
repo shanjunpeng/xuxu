@@ -14,17 +14,42 @@
 	<script type="text/javascript" src="../jquery.fancybox.js?v=2.1.5"></script>
 	<link rel="stylesheet" type="text/css" href="../jquery.fancybox.css?v=2.1.5" media="screen" />
 
+	<!-- Add Thumbnail helper (this is optional) -->
+	<link rel="stylesheet" type="text/css" href="../helpers/jquery.fancybox-thumbs.css?v=1.0.7" />
+	<script type="text/javascript" src="../helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$(".fancybox").fancybox();
+			
+			$(".fancybox-thumbs").fancybox({
+				closeBtn  : false,
+				helpers:{
+					thumbs : {
+						width:50,
+						height:50
+					}
+				}
+			});
+			
 		});
+		
+		
 	</script>
 	<style type="text/css">
 		
 	</style>
 </head>
 <body>
-	<a class="fancybox" rel="group" href="1_b.jpg"><img src="1_s.jpg" alt="" /></a>
-	<a class="fancybox" rel="group" href="2_b.jpg"><img src="2_s.jpg" alt="" /></a>
+<div>
+<ul>
+	<li><a class="fancybox" rel="group" href="1_b.jpg"><img src="1_s.jpg" alt="" /></a></li>
+	<li><a class="fancybox" rel="group" href="2_b.jpg"><img src="2_s.jpg" alt="" /></a></li>
+</ul>	
+</div>	
+<div>
+	<a class="fancybox-thumbs" rel="group" href="1_b.jpg"><img src="1_s.jpg" alt="" /></a>
+	<a class="fancybox-thumbs" rel="group" href="2_b.jpg"><img src="2_s.jpg" alt="" /></a>
+</div>	
 </body>
 </html>

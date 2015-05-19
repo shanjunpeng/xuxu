@@ -95,12 +95,11 @@ public class SqlHelper {
 		//
 		// System.out.println(getFieldsStr(User.class));
 
-		String str = "ENT_FILING_INFO_ID " + "  ENT_FILING_MAG_ID  "
-				+ "  AUDIT_ORG_CODE     " + "  AUDIT_DEPT_CODE    "
-				+ "  AUDIT_PERSON_CODE  " + "  ALLOCATION_DATE    "
-				+ "  RECEIVE_DATE       " + "  AUDIT_STATUS       "
-				+ "  AUDIT_MESSAGE      " + "  AUDIT_SEQ_NO      "
-				+ "  AUDIT_DATE        ";
+		String str = "BASEDATA_UPDATE_ID " + "  BASEDATA_TYPE_CODE "
+				+ "  BASEDATA_TYPE_NAME " + "  CODE              "
+				+ "  NAME               " + "  PARENT_CODE        "
+				+ "  UPDATE_TYPE        " + "  CODE_VERSION       "
+				+ "  UPDATE_DATE       ";
 
 		test1(str);
 	}
