@@ -1,6 +1,5 @@
 package xuxu.blog.entity;
 
-import java.util.Date;
 
 public class User {
 	private String name;
@@ -8,7 +7,7 @@ public class User {
 	private String email;
 	private String nickname;
 	private String idNo;
-	private Date birthday;
+	private String birthday;
 
 	public String getName() {
 		return name;
@@ -50,11 +49,11 @@ public class User {
 		this.idNo = idNo;
 	}
 
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 
