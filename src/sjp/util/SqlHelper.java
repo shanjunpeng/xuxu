@@ -1,6 +1,8 @@
 package sjp.util;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlHelper {
 	public static String getFieldsStr(Class<?> clazz) {
@@ -51,27 +53,43 @@ public class SqlHelper {
 		return result;
 	}
 
-	public static void test1(String str) {
-		String[] arr = str.split(" ");
+	public static void generateClass(String str) {
+		generateClass(handle(str));
+	}
+
+	public static void generateClass(List<TableField> tableFieldList) {
 		String result = "";
 
-		for (String s : arr) {
+		for (TableField field : tableFieldList) {
+			String s = field.fieldName;
 			if (s.trim().length() > 0) {
 				String property = turnToCamelCase(s);
-				result += "private String " + property + ";\n";
+				String classType = "String";
+				if (field.filedType.equalsIgnoreCase("date")) {
+					classType = "Date";
+
+				}
+				result += "private " + classType + " " + property + ";\n";
 			}
 		}
-		for (String s : arr) {
+		for (TableField field : tableFieldList) {
+			String s = field.fieldName;
 			if (s.trim().length() > 0) {
+
 				String property = turnToCamelCase(s);
+				String classType = "String";
+				if (field.filedType.equalsIgnoreCase("date")) {
+					classType = "Date";
+				}
 
 				String setMethod = getNameOfSetMethod(property);
 				String getMethod = getNameOfGetMethod(property);
-				result += "public String " + getMethod + "(){\n "
+				result += "public " + classType + " " + getMethod + "(){\n "
 						+ " return this." + property + ";\n   }\n";
-				result += "public void " + setMethod + "(String " + property
-						+ "){\n setChangedFlag(\"" + property + "\");\nthis."
-						+ property + "=" + property + ";\n   }\n";
+				result += "public void " + setMethod + "(" + classType + " "
+						+ property + "){\n setChangedFlag(\"" + property
+						+ "\");\nthis." + property + "=" + property
+						+ ";\n   }\n";
 			}
 		}
 		System.out.println(result);
@@ -87,6 +105,37 @@ public class SqlHelper {
 				+ property.substring(1);
 	}
 
+	public static List<TableField> handle(String str) {
+		str = str.replaceAll("\n", "");
+		str = str.replaceAll(" +", " ");
+		String[] arr = str.split(",");
+		String regex = "\\s";
+		List<TableField> tableFieldList = new ArrayList<TableField>();
+		SqlHelper sqlHelper = new SqlHelper();
+		for (String string : arr) {
+			TableField field = sqlHelper.new TableField();
+			string = string.trim();
+			String[] arr1 = string.split(" ");
+			field.fieldName = arr1[0];
+			field.filedType = arr1[1];
+			tableFieldList.add(field);
+
+			// System.out.println(field);
+		}
+		return tableFieldList;
+	}
+
+	class TableField {
+		public String fieldName;
+		public String filedType;
+
+		@Override
+		public String toString() {
+			return "TableField [fieldName=" + fieldName + ", filedType="
+					+ filedType + "]";
+		}
+	}
+
 	public static void main(String[] args) {
 		// System.out.println(turnToCamelCase("CHECKLIST_RSP"));
 		// System.out.println(turnToCamelCase("T_DECL_GOODS"));
@@ -95,12 +144,34 @@ public class SqlHelper {
 		//
 		// System.out.println(getFieldsStr(User.class));
 
-		String str = "BASEDATA_UPDATE_ID " + "  BASEDATA_TYPE_CODE "
-				+ "  BASEDATA_TYPE_NAME " + "  CODE              "
-				+ "  NAME               " + "  PARENT_CODE        "
-				+ "  UPDATE_TYPE        " + "  CODE_VERSION       "
-				+ "  UPDATE_DATE       ";
+		String str = "TP_GUID             VARCHAR2(128) not null,\n"
+				+ "  APPROVAL_NO_KEY     VARCHAR2(200),\n"
+				+ "  APPROVAL_NO         VARCHAR2(200),\n"
+				+ "  G_TYPE              VARCHAR2(100),\n"
+				+ "  NAME_OF_PLANT       VARCHAR2(400),\n"
+				+ "  COUNTRY_CODE        VARCHAR2(6),\n"
+				+ "  COUNTRY             VARCHAR2(440),\n"
+				+ "  PREFECTURE          VARCHAR2(100),\n"
+				+ "  CITY                VARCHAR2(100),\n"
+				+ "  ADDRESS             VARCHAR2(400),\n"
+				+ "  APPROVAL_TYPE       VARCHAR2(255),\n"
+				+ "  REMARK              VARCHAR2(4000),\n"
+				+ "  STATE               VARCHAR2(50),\n"
+				+ "  CREATED             DATE,\n"
+				+ "  MODIFIED            DATE,\n"
+				+ "  CHECKSTATE          VARCHAR2(50),\n"
+				+ "  CHECKTIME           DATE,\n"
+				+ "  IS_DELETE           VARCHAR2(50),\n"
+				+ "  OPER_FLAG           CHAR(1),\n"
+				+ "  PROCESS_STATUS_FOOD CHAR(1),\n"
+				+ "  PROCESS_DATE_FOOD   DATE,\n"
+				+ "  PROCESS_STATUS      CHAR(1),\n"
+				+ "  PROCESS_DATE        DATE,\n"
+				+ "  REMARK1             VARCHAR2(100),\n"
+				+ "  REMARK2             VARCHAR2(100)";
+		generateClass(str);
 
-		test1(str);
+		// test1(str);
+		// genAlterScript("RE_BUYER", str);
 	}
 }
