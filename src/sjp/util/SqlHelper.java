@@ -64,11 +64,7 @@ public class SqlHelper {
 			String s = field.fieldName;
 			if (s.trim().length() > 0) {
 				String property = turnToCamelCase(s);
-				String classType = "String";
-				if (field.filedType.equalsIgnoreCase("date")) {
-					classType = "Date";
-
-				}
+				String classType = getClassByDbFieldType(field.fieldType);
 				result += "private " + classType + " " + property + ";\n";
 			}
 		}
@@ -77,32 +73,35 @@ public class SqlHelper {
 			if (s.trim().length() > 0) {
 
 				String property = turnToCamelCase(s);
-				String classType = "String";
-				if (field.filedType.equalsIgnoreCase("date")) {
-					classType = "Date";
-				}
+				String classType = getClassByDbFieldType(field.fieldType);
 
 				String setMethod = getNameOfSetMethod(property);
 				String getMethod = getNameOfGetMethod(property);
-				result += "public " + classType + " " + getMethod + "(){\n "
-						+ " return this." + property + ";\n   }\n";
-				result += "public void " + setMethod + "(" + classType + " "
-						+ property + "){\n setChangedFlag(\"" + property
-						+ "\");\nthis." + property + "=" + property
-						+ ";\n   }\n";
+				result += "public " + classType + " " + getMethod + "(){\n " + " return this." + property + ";\n   }\n";
+				result += "public void " + setMethod + "(" + classType + " " + property + "){\n setChangedFlag(\""
+						+ property + "\");\nthis." + property + "=" + property + ";\n   }\n";
 			}
 		}
 		System.out.println(result);
 	}
 
+	private static String getClassByDbFieldType(String fieldType) {
+		if (fieldType.equalsIgnoreCase("date")) {
+			return "Date";
+		}
+		if (fieldType.equalsIgnoreCase("number")) {
+			return "Double";
+
+		}
+		return "String";
+	}
+
 	public static String getNameOfSetMethod(String property) {
-		return "set" + Character.toUpperCase(property.charAt(0))
-				+ property.substring(1);
+		return "set" + Character.toUpperCase(property.charAt(0)) + property.substring(1);
 	}
 
 	public static String getNameOfGetMethod(String property) {
-		return "get" + Character.toUpperCase(property.charAt(0))
-				+ property.substring(1);
+		return "get" + Character.toUpperCase(property.charAt(0)) + property.substring(1);
 	}
 
 	public static List<TableField> handle(String str) {
@@ -117,7 +116,7 @@ public class SqlHelper {
 			string = string.trim();
 			String[] arr1 = string.split(" ");
 			field.fieldName = arr1[0];
-			field.filedType = arr1[1];
+			field.fieldType = arr1[1];
 			tableFieldList.add(field);
 
 			// System.out.println(field);
@@ -127,48 +126,27 @@ public class SqlHelper {
 
 	class TableField {
 		public String fieldName;
-		public String filedType;
+		public String fieldType;
 
 		@Override
 		public String toString() {
-			return "TableField [fieldName=" + fieldName + ", filedType="
-					+ filedType + "]";
+			return "TableField [fieldName=" + fieldName + ", filedType=" + fieldType + "]";
 		}
 	}
 
 	public static void main(String[] args) {
 		// System.out.println(turnToCamelCase("CHECKLIST_RSP"));
 		// System.out.println(turnToCamelCase("T_DECL_GOODS"));
-		//
+
 		// System.out.println(releaseCamelCase("TDeclGoodsF"));
 		//
 		// System.out.println(getFieldsStr(User.class));
 
-		String str = "TP_GUID             VARCHAR2(128) not null,\n"
-				+ "  APPROVAL_NO_KEY     VARCHAR2(200),\n"
-				+ "  APPROVAL_NO         VARCHAR2(200),\n"
-				+ "  G_TYPE              VARCHAR2(100),\n"
-				+ "  NAME_OF_PLANT       VARCHAR2(400),\n"
-				+ "  COUNTRY_CODE        VARCHAR2(6),\n"
-				+ "  COUNTRY             VARCHAR2(440),\n"
-				+ "  PREFECTURE          VARCHAR2(100),\n"
-				+ "  CITY                VARCHAR2(100),\n"
-				+ "  ADDRESS             VARCHAR2(400),\n"
-				+ "  APPROVAL_TYPE       VARCHAR2(255),\n"
-				+ "  REMARK              VARCHAR2(4000),\n"
-				+ "  STATE               VARCHAR2(50),\n"
-				+ "  CREATED             DATE,\n"
-				+ "  MODIFIED            DATE,\n"
-				+ "  CHECKSTATE          VARCHAR2(50),\n"
-				+ "  CHECKTIME           DATE,\n"
-				+ "  IS_DELETE           VARCHAR2(50),\n"
-				+ "  OPER_FLAG           CHAR(1),\n"
-				+ "  PROCESS_STATUS_FOOD CHAR(1),\n"
-				+ "  PROCESS_DATE_FOOD   DATE,\n"
-				+ "  PROCESS_STATUS      CHAR(1),\n"
-				+ "  PROCESS_DATE        DATE,\n"
-				+ "  REMARK1             VARCHAR2(100),\n"
-				+ "  REMARK2             VARCHAR2(100)";
+		String str = "RSP_ID       VARCHAR2(32) not null,\n" + "  ORDER_ID     NUMBER,\n"
+				+ "  ORDER_NO     VARCHAR2(60),\n" + "  COMPANY_NAME VARCHAR2(200),\n"
+				+ "  COMPANY_CODE VARCHAR2(20),\n" + "  MESSAGE_TYPE VARCHAR2(4),\n"
+				+ "  MESSAGE_DESC VARCHAR2(500),\n" + "  MESSAGE_TIME DATE";
+
 		generateClass(str);
 
 		// test1(str);
